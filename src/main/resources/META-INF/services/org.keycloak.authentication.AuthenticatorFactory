@@ -1,1 +1,1 @@
-com.vulinh.keycloak.spi.BruteForceLockedOutCheck
+com.vulinh.keycloak.spi.ExtendedUsernamePasswordFormFactory
