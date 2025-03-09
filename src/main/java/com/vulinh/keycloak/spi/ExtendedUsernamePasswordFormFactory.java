@@ -2,9 +2,11 @@ package com.vulinh.keycloak.spi;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.keycloak.Config;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.AuthenticatorFactory;
+import org.keycloak.events.Errors;
 import org.keycloak.models.AuthenticationExecutionModel.Requirement;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
@@ -13,14 +15,19 @@ import org.keycloak.provider.ProviderConfigProperty;
 
 public class ExtendedUsernamePasswordFormFactory implements AuthenticatorFactory {
 
-  public static final ExtendedUsernamePasswordForm INSTANCE = new ExtendedUsernamePasswordForm();
+  static final Map<String, String> ERROR_MAPS =
+      Map.ofEntries(
+          Map.entry(Errors.USER_DISABLED, "brute-force-permanent-disabled"),
+          Map.entry(Errors.USER_TEMPORARILY_DISABLED, "brute-force-temporary-disabled"));
 
-  private static final Requirement[] REQUIREMENT_CHOICES = {Requirement.REQUIRED};
-
-  private static final String PROVIDER_ID = "0000-auth-username-password-form";
-  private static final String DISPLAY_TYPE = "0000/New Username Password Form";
-  private static final String HELP_TEXT =
+  static final String PROVIDER_ID = "0000-auth-username-password-form";
+  static final String DISPLAY_TYPE = "0000/New Username Password Form";
+  static final String HELP_TEXT =
       "Replace Username Password Form with different messages when enforced by brute-force protection";
+
+  static final ExtendedUsernamePasswordForm INSTANCE = new ExtendedUsernamePasswordForm();
+
+  static final Requirement[] REQUIREMENT_CHOICES = {Requirement.REQUIRED};
 
   @Override
   public Authenticator create(KeycloakSession session) {
